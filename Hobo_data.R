@@ -111,3 +111,6 @@ hobo<-hobo %>%
   filter(.$high_cond >=100|is.na(.$high_cond))
 hobo<- hobo %>% 
   filter(.$full_cond<=10000|is.na(.$full_cond))
+
+#####Adding a station Name so that it can be integrated with the rest of the YSI data#####
+hobo$station<-"HOBO"
