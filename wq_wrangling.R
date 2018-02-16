@@ -33,12 +33,42 @@ salinity_day$date<- paste(salinity_day$Year,
 salinity_day$date<-ymd(salinity_day$date)
 
 salinity_hour_hobo<-hobo %>% 
-  group_by(Year, Month, Day, hour) %>% 
-  summarise(daily_av=mean(salinity))
+  group_by(station, Year, Month, Day, hour) %>% 
+  summarise(hourly_av=mean(salinity)) %>% 
+  rename(Station="station")
+
 salinity_hour_hobo$date_time<- paste(salinity_hour_hobo$Year,"-", 
                                 salinity_hour_hobo$Month, "-", salinity_hour_hobo$Day, " ",
                                 salinity_hour_hobo$hour, sep = "")
 salinity_hour_hobo$date_time<-ymd_h(salinity_hour_hobo$date_time)
+
+salinity_day_hobo<-hobo %>% 
+  group_by(station, Year, Month, Day) %>% 
+  summarise(daily_av=mean(salinity)) %>% 
+  rename(Station="station")
+salinity_day_hobo$date<- paste(salinity_day_hobo$Year, 
+                          salinity_day_hobo$Month, salinity_day_hobo$Day, sep = "-")
+salinity_day_hobo$date<-ymd(salinity_day_hobo$date)
+#You need this step because anything with a geom_line that doesn't have points missing connects them
+#this step adds NA points for each day so they don't connect
+date<-seq(as.Date("2017-01-01"),as.Date("2017-12-31"),1)
+Station<-"North"
+Northdays<-data_frame(date, Station)
+Station<-"Mid"
+Midays<-data_frame(date, Station)
+Station<-"South"
+Southdays<-data_frame(date, Station)
+salinity_day2<-Northdays %>% 
+  full_join(., salinity_day) %>% 
+  full_join(., Midays) %>% 
+  full_join(., Southdays)
+
+
+date<-seq(as.Date("2017-01-01"),as.Date("2017-12-31"),1)
+Station<-"Hobo"
+alldays<-data_frame(date, Station)
+salinity_day_hobo2<-alldays %>% 
+  full_join(., salinity_day_hobo) 
 
 #####Water Level Averages#####
 wl_hour<-wq_2017 %>% 
