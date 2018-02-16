@@ -11,11 +11,29 @@ pal3<-c("North"="#FF4F00", "Mid"="#FF9500", "South"="#0C5DA5", "Hobo"="#00AC6B")
 pal4<-c("North"="#49E307", "Mid"="#06BA8D", "South"="#F30731", "Hobo"="#FF6408")
 pal5<-c("North"="#DE4500", "Mid"="#DE8200", "South"="#095090", "Hobo"="#00965D")
 pal6<-c("North"="#E69F00", "Mid"="#56B4E9", "South"="#009E73", "Hobo"="#F0E442")
+pal7<-c("North"="#E69F00", "Mid"="#F0E442", "South"="#009E73", "Hobo"="#56B4E9")
 
 #####Plots######
 ###Salinity###
+#Hourly average Salinity for all stations
 a<-ggplot()+
-  geom_point(data=wq_2017, aes(x=DateTime, y=Salinity, color=Station), size=0.5)+
+  geom_point(data=salinity_hour_hobo, aes(x=date_time, y=hourly_av, color= Station),size =0.5)+
+  geom_point(data=salinity_hour, aes(x=date_time, y=hourly_av, color= Station), size=0.5)+
   theme_minimal()+
-  scale_colour_manual(values =pal6)
+  scale_colour_manual(values =pal7)+
+  ggtitle("Hourly Average Salinity at Cove Point 2017")+
+  ylab("Salinity (ppt)")+
+  xlab("Date")+
+  guides(color = guide_legend(override.aes = list(size=2.5)))
 a
+
+#Daily average salinity for all stations
+b<-ggplot()+
+  geom_line(data=salinity_day_hobo2, aes(x=date, y=daily_av, color= Station), na.rm = FALSE, size=1)+
+  geom_line(data=salinity_day2, aes(x=date, y=daily_av, color= Station), na.rm = FALSE, size =1)+
+  theme_minimal()+
+  scale_colour_manual(values =pal7)+
+  ggtitle("Daily Average Salinity at Cove Point 2017")+
+  ylab("Salinity (ppt)")+
+  xlab("Date")
+b
