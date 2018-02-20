@@ -95,6 +95,14 @@ temp_hour$date_time<- paste(temp_hour$Year,"-",
                           temp_hour$hour, sep = "")
 temp_hour$date_time<-ymd_h(temp_hour$date_time)
 
+temp_hour_all<-wq_2017 %>% 
+  group_by(Year, Month, Day, hour) %>% 
+  summarise(hourly_av=mean(Temp))
+temp_hour_all$date_time<- paste(temp_hour_all$Year,"-", 
+                            temp_hour_all$Month, "-", temp_hour_all$Day, " ",
+                            temp_hour_all$hour, sep = "")
+temp_hour_all$date_time<-ymd_h(temp_hour_all$date_time)
+
 temp_day<-wq_2017 %>% 
   group_by(Station, Year, Month, Day) %>% 
   summarise(daily_av=mean(Temp))
@@ -119,6 +127,6 @@ do_day$date<- paste(do_day$Year,
                     do_day$Month, 
                     do_day$Day, sep = "-")
 do_day$date<-ymd(do_day$date)
-
+#####Hypoxia times#####
 hypoxia<-wq_2017 %>% 
-  filter(., ODO_Conc<= 4)
+  filter(., ODO_Conc<= 2)

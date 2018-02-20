@@ -354,6 +354,10 @@ wq_2017$DateTime<-ymd_hms(wq_2017$DateTime)
 wq_2017$Station<-factor(wq_2017$Station, levels = c("Hobo", "North", "Mid", "South"))
 write.csv(wq_2017, "Raw YSI Data/wq_2017", row.names=FALSE)
 
+#remove crazy outlier point that had a reading of 100 degrees celsius
+wq_2017<-wq_2017 %>% 
+  filter(!Temp>=50)
+
 rm(s1, s2, s3, s4, s5, s6, s7, s8, s9)
 rm(n1, n2, n3, n4, n5, n6, n7, n8)
 rm(met1, met2, met3, met4, met5, met6, met7, met8)

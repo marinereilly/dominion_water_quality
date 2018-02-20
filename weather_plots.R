@@ -42,7 +42,9 @@ met_hour<-met_all %>%
 
 #####Annual Temperatures#####
 ####Raw Data
-a<-ggplot(met_2017)
+a<-met_hour %>% 
+  filter(Year=="2017") %>% 
+  ggplot()
 b<-a+
-  geom_point(aes(x=DateTime, y=Temp), size = .5)
+  geom_line(aes(x=Yday, y=Av_Temp), size = .5)
 b

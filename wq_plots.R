@@ -27,6 +27,8 @@ a<-ggplot()+
   guides(color = guide_legend(override.aes = list(size=2.5)))
 a
 
+
+
 #Daily average salinity for all stations
 b<-ggplot()+
   geom_line(data=salinity_day_hobo2, aes(x=date, y=daily_av, color= Station), na.rm = FALSE, size=1)+
@@ -37,3 +39,26 @@ b<-ggplot()+
   ylab("Salinity (ppt)")+
   xlab("Date")
 b
+
+#Hourly Averages of DO and Temperature
+c<-ggplot()+
+  geom_line(data=temp_hour_all, aes(x=date_time, y=hourly_av), color= "darkorchid4", na.rm = FALSE,)+
+  geom_point(data = do_hour, aes(x=date_time, y=hourly_av, color=Station), size=0.1, na.rm = FALSE,)+
+  guides(color = guide_legend(override.aes = list(size=2.5)))+
+  geom_hline(yintercept = 2, color="black", linetype = "dashed")+
+  scale_colour_manual(values =pal7)+
+  ggtitle("2017 Hourly Dissolved Oxygen and Temperature")+
+  xlab("Date")+
+  ylab("DO concentration (mg/L); Water Temperature (C)")+
+  theme_minimal()+
+  guides(color = guide_legend(override.aes = list(size=2.5)))
+c  
+
+#Hypoxia
+d<-ggplot()+
+  geom_point(data=hypoxia, aes(x=DateTime, y=Station, color=Station))+
+  scale_colour_manual(values =pal7)+
+  theme_minimal()+
+  ggtitle("Date of Hypoxia by Station")+
+  xlab("Date")
+d
