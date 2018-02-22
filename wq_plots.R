@@ -86,5 +86,46 @@ e<-daily_av_2010_2017 %>%
   facet_grid(Station~.)+
   xlab("Date")+ylab("Average Daily Salinity (ppt)")+
   ggtitle("2010 to 2017 salinities at Cove Point Marsh")
+  
 e
+ggsave(file="2010_2017_Daily_sal.png")
+###Hourly Salinity by Station###
+f<-hourly_av_2010_2017 %>% 
+  ggplot()+
+  geom_point(aes(x=days, y=Salinity_Mean, color=Year))+
+  scale_colour_manual(values=ypal2)+
+  scale_x_date(date_labels =  "%b")+
+  scale_y_continuous(limits= c(0, 15))+
+  theme_minimal()+
+  facet_grid(Station~.)+
+  xlab("Date")+ylab("Average Hourly Salinity (ppt)")+
+  ggtitle("2010 to 2017 Salinities at Cove Point Marsh")
+f
+ggsave(filename = "2010_2017_Hourly_sal.png")
+
+###Hourly Temp by Station###
+g<-hourly_av_2010_2017 %>% 
+  ggplot()+
+  geom_smooth(aes(x=days, y=Temp_Mean, color=Year), size=1, se=FALSE)+
+  scale_colour_manual(values=ypal2)+
+  scale_x_date(date_labels =  "%b")+
+  theme_minimal()+
+  facet_grid(Station~.)+
+ xlab("Date")+ylab("Smoothed Average Hourly Water Temperature (C)")+
+  ggtitle("2010 to 2017 Water Temperature at Cove Point Marsh")
+g
+ggsave(filename = "2010_2017_Hourly_WTemp.png")
+
+###Hourly Depth by Station###
+h<-hourly_av_2010_2017 %>% 
+  ggplot()+
+  geom_point(aes(x=days, y=Depth_Mean, color=Year), size=0.5)+
+  scale_colour_manual(values=ypal2)+
+  scale_x_date(date_labels =  "%b")+
+  scale_y_continuous(limits = c(0, 5))+
+  theme_minimal()+
+  facet_grid(Station~.)+
+  xlab("Date")+ylab("Average Hourly Water Depth (m)")+
+  ggtitle("2010 to 2017 Water Depth at Cove Point Marsh")
+h
 
