@@ -13,7 +13,7 @@ pal5<-c("North"="#DE4500", "Mid"="#DE8200", "South"="#095090", "Hobo"="#00965D")
 pal6<-c("North"="#E69F00", "Mid"="#56B4E9", "South"="#009E73", "Hobo"="#F0E442")
 pal7<-c("North"="#E69F00", "Mid"="#F0E442", "South"="#009E73", "Hobo"="#56B4E9")
 
-#####Plots######
+#####2017 Plots######
 ###Salinity###
 #Hourly average Salinity for all stations
 a<-ggplot()+
@@ -62,3 +62,29 @@ d<-ggplot()+
   ggtitle("Date of Hypoxia by Station")+
   xlab("Date")
 d
+
+##### All Years Plots #####
+#### Palates for Years####
+ypal1 <- c("2010"="#fff7f3", "2011"="#fde0dd", "2012"="#fcc5c0", "2013"="#fa9fb5", 
+           "2014"="#f768a1", "2015"="#dd3497", "2016"="#ae017e", "2017"="#7a0177")
+ypal2 <- c("2010"="#fde0dd", "2011"="#fcc5c0", "2012"="#fa9fb5", "2013"="#f768a1", 
+          "2014"="#dd3497", "2015"="#ae017e", "2016"="#7a0177", "2017"="#49006a")
+ypal3 <- c("2010"="#f7fcf0", "2011"="#e0f3db", "2012"="#ccebc5", "2013"="#a8ddb5", 
+          "2014"="#7bccc4", "2015"="#4eb3d3", "2016"="#2b8cbe", "2017"="#08589e")
+###Daily Salinity by station###
+##Remove outliers as plotted so that we don't lose other data##
+#two values are above 500 which seems improbable# 
+#There are 6 other really high values that the 2013 reportmention occur during
+#a storm. Rather than filter anything I am adjusting the scale or the y axis
+e<-daily_av_2010_2017 %>% 
+  ggplot()+
+  geom_point(aes(x=days, y=Salinity_Mean, color=Year))+
+  scale_colour_manual(values=ypal2)+
+  scale_y_continuous(limits= c(0, 13))+
+  scale_x_date(date_labels =  "%b")+
+  theme_minimal()+
+  facet_grid(Station~.)+
+  xlab("Date")+ylab("Average Daily Salinity (ppt)")+
+  ggtitle("2010 to 2017 salinities at Cove Point Marsh")
+e
+
