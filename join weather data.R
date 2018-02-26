@@ -11,10 +11,13 @@ library(lubridate)
 ####Loading all of the different data pieces####
 met_2017<-read.csv("Raw YSI Data/MET2017.csv")
 groan()
-View(met_2015)
-met_2017<- met_2017 %>% 
-  select(-X)
 met_2017$DateTime<-ymd_hms(met_2017$DateTime)
+#there was a failure of the air temperature sensor on October 18th.  
+#all 2017 past that are being removed
+met_2017<- met_2017 %>% 
+  filter(., met_2017$DateTime < "2017-10-18 00:00:00")
+
+
 met_2016<-read.csv("Data_2010_2016/MET_2016.csv")
 met_2015<-read.csv("Data_2010_2016/MET_2015.csv")
 met_2014<-read.csv("Data_2010_2016/MET_2014.csv")
@@ -56,10 +59,5 @@ remove(met_2015)
 remove(met_2016)
 remove(met_2017)
 
-#####Formatting for averages#####
-met_all$Year<-year(met_all$DateTime)
-met_all$Month<-month(met_all$DateTime)
-met_all$Yday<-yday(met_all$DateTime)
-met_all$Hour<-hour(met_all$DateTime)
 
-write.csv(met_all, "Raw YSI Data/met_all.csv", row.names = FALSE)
+
