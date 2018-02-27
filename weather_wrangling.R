@@ -30,7 +30,10 @@ met_monthly_sum_2010_2017<-met_all %>%
   group_by(Year, Month) %>% 
   summarise_if(.predicate = function(x) is.numeric(x),
                .funs = c(Sum="sum"), na.rm=TRUE)
-
+met_monthly_sum_2010_2017$Month<-as.numeric(met_monthly_sum_2010_2017$Month)
+met_monthly_sum_2010_2017$Year<-as.factor(met_monthly_sum_2010_2017$Year)
+met_monthly_sum_2017<-met_monthly_sum_2010_2017 %>% 
+  filter(Year=="2017")
 ######Wind Stuff######
 
 met_all$grouped_wind<- if_else(met_all$Wind_Dir>0 & met_all$Wind_Dir<=22, 0, if_else(
