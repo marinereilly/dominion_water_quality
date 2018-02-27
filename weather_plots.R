@@ -88,19 +88,48 @@ w<- ggplot()+
 w  
 
 #####Annual Temperatures 2010-2017#####
-
-
+v<-ggplot()+
+  geom_point(data=met_daily_av_2010_2017, aes(x=days, y=Air_Temp_Mean, color=Year), alpha=0.2)+
+  geom_smooth(data=met_all, aes(x=days, y=Air_Temp, color=Year), se=FALSE, size=1)+
+  geom_smooth(data=met_2017, aes(x=days, y=Air_Temp, color=Year), se=FALSE,  size=2)+
+  theme_minimal()+
+  scale_color_manual(values= ypal2)+
+  ggtitle("Yearly Air Temperatures")+
+  xlab("Date")+ylab("Air Temperature (C)")+
+  scale_x_date(date_labels = "%b")
+v
+#####Raindays and amounts
+u<-ggplot(rain) +
+  geom_smooth(aes(x=Year, y = yearly_rainfall/raindays), method=lm)+
+  geom_point(aes(x=Year, y = yearly_rainfall/raindays))
+u
 #####Wind and storm Plotting
-met_2017<-met_all %>% 
-  filter(Year=="2017") 
-w<-ggplot(data=met_2017, aes(x=DateTime, y=Wind_spd))+
-            geom_point()
-w
-high_wind<-met_2017 %>% 
-  filter(Wind_spd>=18)
-w<-ggplot()+
-  geom_histogram(data=high_wind, aes(x=days), binwidth = 1)+
-  scale_x_date(limits = c(as.Date("2020-12-01"), as.Date("2020-12-31")),
-               date_minor_breaks = "1 day")
-w
+
+t<-ggplot(data=wind_freq, aes(x=grouped_wind, y= n, color=Year))+
+  geom_line(size=.8)+
+  geom_line(data = wind_freq_2017, aes(x=grouped_wind, y= n, color=Year),linetype="solid", size=2)+
+  theme_minimal()+
+  scale_color_manual(values = ypal2)+
+  scale_x_continuous(breaks = c(0, 45, 90, 135,180,225,270,315), limits = c(0,360), 
+                     labels = c("N", "NE", "E", "SE", "S", "SW", "W", "NW"), minor_breaks = NULL)+
+  coord_polar(theta="x", start = )+
+  theme(axis.line=element_blank(),axis.text.y=element_blank(),axis.ticks=element_blank(), 
+        axis.title.x=element_blank(), 
+        axis.title.y=element_blank())+
+  ggtitle("Winds at Cove Point Marsh are Primarily Northwesterly and Southerly")
+t
 groan()
+
+s<-ggplot(data=hw_freq, aes(x=grouped_wind, y= n, color=Year))+
+  geom_line(size=.8)+
+  geom_line(data = hw_2017, aes(x=grouped_wind, y= n, color=Year), size=2)+
+  theme_minimal()+
+  scale_color_manual(values = ypal2)+
+  scale_x_continuous(breaks = c(0, 45, 90, 135,180,225,270,315), limits = c(0,360), 
+                     labels = c("N", "NE", "E", "SE", "S", "SW", "W", "NW"), minor_breaks = NULL)+
+  coord_polar(theta="x", start = )+
+  theme(axis.line=element_blank(),axis.text.y=element_blank(),axis.ticks=element_blank(), 
+        axis.title.x=element_blank(), 
+        axis.title.y=element_blank())+
+  ggtitle("North Winds Dominated High Wind Events In 2017")
+s
