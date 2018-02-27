@@ -55,6 +55,23 @@ z<-ggplot()+
       alpha=1)))
 z
 
+#####Salinity and Precipitation by Station#####
+y<-ggplot()+
+  geom_point(data=salinity, aes(x=days, y=Salinity_Mean, color=Station), na.rm = TRUE, size=0.6)+
+  geom_line(data=met_daily_sum_2017, aes(x=days, y=Rainfall_Sum, color= "Precipitation"))+
+  theme_minimal()+
+  scale_color_manual(breaks= legend_ord, values = pal9)+
+  scale_x_date(date_labels = "%b", date_breaks = "month")+
+  scale_y_continuous(minor_breaks = NULL)+
+  ggtitle("Salinity and Precipitation by Station")+
+  xlab("Date")+ylab("Salinity (ppt), Rainfall (in)")+
+  guides(color = guide_legend(title = "Stations",
+                              override.aes = list(
+                                size=c(2.5, 2.5, 2.5, 1), 
+                                shape = c(16, 16, 16, NA), 
+                                linetype = c("blank", "blank", "blank", "solid"))))+
+  facet_grid(Station~.)
+y  
 
 
 
