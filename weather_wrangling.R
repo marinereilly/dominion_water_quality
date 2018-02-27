@@ -19,17 +19,17 @@ met_all$days<-as.Date(format(met_all$DateTime,"%d-%m-2007"),format="%d-%m-%y")
 met_daily_av_2010_2017<-met_all %>% 
   group_by(Year, days) %>% 
   summarise_if(.predicate = function(x) is.numeric(x),
-               .funs = c(Mean="mean", Sd="sd"))
+               .funs = c(Mean="mean", Sd="sd"), na.rm=TRUE)
 
 met_daily_sum_2010_2017<-met_all %>% 
   group_by(Year, days) %>% 
   summarise_if(.predicate = function(x) is.numeric(x),
-               .funs = c(Sum="sum"))
+               .funs = c(Sum="sum"), na.rm=TRUE)
 
-met_daily_sum_2010_2017<-met_all %>% 
+met_monthly_sum_2010_2017<-met_all %>% 
   group_by(Year, Month) %>% 
   summarise_if(.predicate = function(x) is.numeric(x),
-               .funs = c(Sum="sum"))
+               .funs = c(Sum="sum"), na.rm=TRUE)
 
 ######Wind Stuff######
 
@@ -49,3 +49,19 @@ met_calc<-met_all %>%
   summarise(total_rainfall = sum(Rainfall, na.rm=TRUE), max_air_temp = max(Air_Temp, na.rm=TRUE), 
             min_air_temp = min(Air_Temp, na.rm=TRUE), mean_air_temp=mean(Air_Temp, na.rm=TRUE))
 write.csv(met_calc, "met_calcs.csv")
+
+
+#####Pull just 2017#####
+met_daily_av_2017<- met_daily_av_2010_2017 %>% 
+  filter(Year == "2017")
+met_daily_sum_2017<- met_daily_sum_2010_2017 %>% 
+  filter(Year =="2017")
+######For Depth, Precipitation and Salinity Plot
+depth<-wq_2017 %>% 
+  filter(Depth<=8) %>% 
+  group_by(days, Hour) %>% 
+  summarise(av_depth=mean(Depth))
+salinity<-hourly_av_2010_2017 %>% 
+  filter(Year=="2017")
+salinity2<-daily_av_2010_2017 %>% 
+  filter(Year=="2017")
