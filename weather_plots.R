@@ -57,6 +57,7 @@ z
 
 #####Salinity and Precipitation by Station#####
 y<-ggplot()+
+  geom_hline(yintercept = 0, color= "grey69")+
   geom_point(data=salinity, aes(x=days, y=Salinity_Mean, color=Station), na.rm = TRUE, size=0.6)+
   geom_line(data=met_daily_sum_2017, aes(x=days, y=Rainfall_Sum, color= "Precipitation"))+
   theme_minimal()+
@@ -70,40 +71,36 @@ y<-ggplot()+
                                 size=c(2.5, 2.5, 2.5, 1), 
                                 shape = c(16, 16, 16, NA), 
                                 linetype = c("blank", "blank", "blank", "solid"))))+
-  facet_grid(Station~.)
+  facet_grid(Station~., switch = "y")+
+  theme(strip.text.y = element_text(angle = 180))
 y  
+#####Monthly Precipitation#####
+
+w<- ggplot()+
+  geom_line(data=met_monthly_sum_2010_2017,aes(x=Month, y=Rainfall_Sum, color=Year), size=1, na.rm = TRUE)+
+  geom_line(data=met_monthly_sum_2017,aes(x=Month, y=Rainfall_Sum, color=Year), size=2)+
+  scale_color_manual(values = ypal2)+
+  scale_x_continuous(breaks = c(1,2,3,4,5,6,7,8,9,10,11,12), 
+                     labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))+
+  theme_minimal()+
+  ggtitle("Monthly Rainfall at Cove Point Marsh")+
+  ylab("Rainfall (in)")
+w  
+
+#####Annual Temperatures 2010-2017#####
 
 
-
-
-
-#####Creating Monthly Daily and Hourly Averages/Accumulations####
-met_month<-met_all %>% 
-  group_by(Year, Month) %>% 
-  summarise(Av_Temp=mean(Air_Temp), Av_RH = mean(RH), Av_BP = mean(BP),
-            mo_Rf = sum(Rainfall), mo_Hail = sum(Hail))
-met_month$FakeDay<-15
-met_month$DateTime<-paste(met_month$Year, met_month$Month, 
-                          met_month$FakeDay, sep = "-")
-met_month$DateTime<-ymd(met_month$DateTime)
-met_month<-met_month %>% 
-  select(-c(Month,FakeDay))
-
-met_day<-met_all %>% 
-  group_by(Year, Yday) %>% 
-  summarise(Av_Temp=mean(Air_Temp), Av_RH = mean(RH), Av_BP = mean(BP),
-            mo_Rf = sum(Rainfall), mo_Hail = sum(Hail))
-
-met_hour<-met_all %>% 
-  group_by(Year, Yday, Hour) %>% 
-  summarise(Av_Temp=mean(Air_Temp), Av_RH = mean(RH), Av_BP = mean(BP),
-            mo_Rf = sum(Rainfall), mo_Hail = sum(Hail))
-
-#####Annual Temperatures#####
-####Raw Data
-a<-met_hour %>% 
-  filter(Year=="2017") %>% 
-  ggplot()
-b<-a+
-  geom_line(aes(x=Yday, y=Av_Temp), size = .5)
-b
+#####Wind and storm Plotting
+met_2017<-met_all %>% 
+  filter(Year=="2017") 
+w<-ggplot(data=met_2017, aes(x=DateTime, y=Wind_spd))+
+            geom_point()
+w
+high_wind<-met_2017 %>% 
+  filter(Wind_spd>=18)
+w<-ggplot()+
+  geom_histogram(data=high_wind, aes(x=days), binwidth = 1)+
+  scale_x_date(limits = c(as.Date("2020-12-01"), as.Date("2020-12-31")),
+               date_minor_breaks = "1 day")
+w
+groan()
