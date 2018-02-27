@@ -14,8 +14,7 @@ groan()
 met_2017$DateTime<-ymd_hms(met_2017$DateTime)
 #there was a failure of the air temperature sensor on October 18th.  
 #all 2017 past that are being removed
-met_2017<- met_2017 %>% 
-  filter(., met_2017$DateTime < "2017-10-18 00:00:00")
+met_2017$Air_Temp<- ifelse(met_2017$DateTime >="2017-10-18 00:00:00", NA, met_2017$Air_Temp)
 
 
 met_2016<-read.csv("Data_2010_2016/MET_2016.csv")
