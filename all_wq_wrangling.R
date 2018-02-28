@@ -9,6 +9,7 @@ wq_all<-read.csv("Raw YSI Data/wq_2010_2017.csv")
 wq_all$DateTime<-ymd_hms(wq_all$DateTime)
 wq_all$Year<-as.factor(wq_all$Year)
 wq_all$Month<-as.factor(wq_all$Month)
+wq_all$Day<-day(wq_all$DateTime)
 wq_all$YDay<-as.factor(wq_all$YDay)
 wq_all$Hour<-as.factor(wq_all$Hour)
 #Use this instead of ydays because it keeps it in date format for plotting
@@ -32,7 +33,12 @@ hourly_av_2017<-hourly_av_2010_2017 %>%
 daily_av_2017<- daily_av_2010_2017 %>% 
   filter(Year==2017)
 
-
+salinity_hour_2017<-wq_all %>% 
+  filter(Year==2017) %>% 
+  group_by(Month, Day, Hour, Station) %>% 
+  summarise(salinity=mean(Salinity))
+salinity_hour_2017$Date.Time<-paste0(salinity_hour_2017$Month,"-", salinity_hour_2017$Day, "-2017", " ", salinity_hour_2017$Hour, ":00", sep="")
+salinity_hour_2017$Date.Time<-mdy_hm(salinity_hour_2017$Date.Time)
 #####Remove Crazy outliers#####
 #There are two Salinity averages above 500 which seems improbable but deleting
 #these values likely removes other values so I am going to attempt to remove

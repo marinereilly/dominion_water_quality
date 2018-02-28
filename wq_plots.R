@@ -162,3 +162,25 @@ h<-hourly_av_2010_2017 %>%
   xlab("Date")+ylab("Average Hourly Water Depth (m)")+
   ggtitle("2010 to 2017 Water Depth at Cove Point Marsh")
 h
+
+####Storm Plots for Salinity and Tide (and Maybe Precip)###
+
+j<-ggplot()+
+  geom_line(data= tide, aes(x=Date.Time, y=Water.Level), color= "darkturquoise", size=1.5)+
+  geom_line(data = salinity_hour_2017, aes(x=Date.Time, y=salinity, color=Station), size=1.5)+
+  scale_color_manual(values = pal7)+theme_minimal()+
+  geom_hline(yintercept = 0.3580311, linetype="dotted")+
+  scale_x_datetime(date_labels = "%b %d", limits = c(
+    as.POSIXct("2017-11-05 00:00:00"), as.POSIXct("2017-11-08 00:00:00")))+
+  ggtitle("Salinity and Tide During Storm Events")+
+  xlab("Date")+ylab("Salinity (ppt), Water Level (ft)")+
+  scale_y_continuous(limits = c(0,2))
+j  
+
+#List of Dates looked at
+#"2017-01-19 00:00:00"), as.POSIXct("2017-01-29 00:00:00"
+#
+#*3.28084
+#
+#
+#
