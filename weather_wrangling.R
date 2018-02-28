@@ -113,7 +113,29 @@ met_all$beaufort<-if_else(1>met_all$Wind_spd, 0,
                                                                                           if_else(55>met_all$Wind_spd,9,999999))))))))))
 
                           
-                          
+wind_freq_strength<-met_all%>% 
+  group_by(Year, beaufort) %>% 
+  count(., grouped_wind)                          
+wind_freq_strength_2017<-wind_freq_strength %>% 
+  filter(Year==2017)
+wind_freq_strength_2017$beaufort<-as.factor(wind_freq_strength_2017$beaufort)
+wind_freq_strength_2017$direction<-if_else(wind_freq_strength_2017$grouped_wind==0, "N", 
+                                      if_else(wind_freq_strength_2017$grouped_wind==45, "NE",
+                                         if_else(wind_freq_strength_2017$grouped_wind==90, "E",
+                                           if_else(wind_freq_strength_2017$grouped_wind==135, "SE",
+                                              if_else(wind_freq_strength_2017$grouped_wind==180, "S",
+                                                if_else(wind_freq_strength_2017$grouped_wind==225, "SW",
+                                                  if_else(wind_freq_strength_2017$grouped_wind==270, "W",
+                                                    if_else(wind_freq_strength_2017$grouped_wind==315, "NW","9999999"))))))))
+wind_freq_strength_2017<-wind_freq_strength_2017[-54,]
+wind_freq_strength_2017$direction<-factor(wind_freq_strength_2017$direction, levels=c("E", "SE", "S", "SW", "W", "NW", "N", "NE"))
+wind_freq_strength_2017$beaufort<-factor(wind_freq_strength_2017$beaufort, levels = c("8","7", "6", "5", "4", "3", "2", "1", "0"))
+ws_zero<-wind_freq_strength_2017 %>% 
+  filter(grouped_wind==0)
+ws_zero$grouped_wind<-360
+ws_2017<-wind_freq_strength_2017 %>% 
+  bind_rows(., ws_zero)
+
 ######Calc for table#####
 met_calc<-met_all %>% 
   group_by(Year) %>% 
