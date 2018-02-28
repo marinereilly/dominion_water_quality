@@ -114,3 +114,15 @@ hobo<- hobo %>%
 
 #####Adding a station Name so that it can be integrated with the rest of the YSI data#####
 hobo$station<-"Hobo"
+hobo$Year<-year(hobo$date_time)
+hobo$Hour <-hour(hobo$date_time)
+hobo$days<-as.Date(format(hobo$date_time,"%d-%m-2007"),format="%d-%m-%y")
+
+hobo_daily_av_2010_2017<-hobo %>% 
+  group_by(station, Year, days) %>% 
+  summarise_if(.predicate = function(x) is.numeric(x),
+               .funs = c(Mean="mean", Sd="sd"))
+hobo_hour_av_2010_2017<-hobo %>% 
+  group_by(station, Year, days, Hour) %>% 
+  summarise_if(.predicate = function(x) is.numeric(x),
+               .funs = c(Mean="mean", Sd="sd"))
