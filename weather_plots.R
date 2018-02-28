@@ -8,7 +8,7 @@
 
 #####Load Packages#####
 library(tidyverse)
-library(RColorBrewer)
+library(cowplot)
 library(ggthemes)
 library(viridis)
 library(dadjoke)
@@ -133,3 +133,18 @@ s<-ggplot(data=hw_freq, aes(x=grouped_wind, y= n, color=Year))+
         axis.title.y=element_blank())+
   ggtitle("North Winds Dominated High Wind Events In 2017")
 s
+
+#2017 frequency of direction by wind strength
+
+r<-ggplot(data=wind_freq_strength_2017)+
+  geom_bar(aes(x=direction, y=n, fill=beaufort), color="black", stat="identity")+
+  theme_minimal()+
+  scale_fill_viridis(discrete=TRUE, option="magma", direction = -1)+
+  ggtitle("2017 Wind Speed on the Beaufort Scale")+
+  coord_polar(theta="x", start = 1.18682)+
+  theme(axis.line=element_blank(),axis.text.y=element_blank(),axis.ticks=element_blank(), 
+        axis.title.x=element_blank(), 
+        axis.title.y=element_blank())+
+  guides(fill=guide_legend(title="Beaufort Number"))
+r  
+
