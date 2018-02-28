@@ -27,8 +27,10 @@ hourly_av_2010_2017<-wq_all %>%
   group_by(Station, Year, days, Hour) %>% 
   summarise_if(.predicate = function(x) is.numeric(x),
                .funs = c(Mean="mean", Sd="sd"))
-
-
+hourly_av_2017<-hourly_av_2010_2017 %>% 
+  filter(Year==2017)
+daily_av_2017<- daily_av_2010_2017 %>% 
+  filter(Year==2017)
 
 
 #####Remove Crazy outliers#####
