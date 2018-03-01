@@ -5,6 +5,10 @@ library(lubridate)
 
 #####Load data or data from Join all data script#####
 wq_all<-read.csv("Raw YSI Data/wq_2010_2017.csv")
+kayak<-read.csv("kayak.csv")
+kayak$Date<-mdy(kayak$Date)
+kayak$DateTime<-paste(kayak$Date, "12:00", sep = " ")
+kayak$DateTime<-ymd_hm(kayak$DateTime)
 
 wq_all$DateTime<-ymd_hms(wq_all$DateTime)
 wq_all$Year<-as.factor(wq_all$Year)

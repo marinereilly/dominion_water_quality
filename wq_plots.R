@@ -17,15 +17,15 @@ pal7<-c("North"="#E69F00", "Mid"="#F0E442", "South"="#009E73", "Hobo"="#56B4E9",
 ###Salinity###
 #Hourly average Salinity for all stations
 a<-ggplot()+
-  geom_point(data=hobo_daily_av_2010_2017, aes(x=days, y=salinity_Mean, color= station),shape=18 ,size =1)+
-  geom_point(data=daily_av_2017, aes(x=days, y=Salinity_Mean, color= Station), size=0.9)+
+  geom_point(data=salinity_hour_2017, aes(x=Date.Time, y=salinity, color= Station), size=0.9)+
+  geom_point(data=kayak, aes(x=as.POSIXct(Date), y=Av_Salinity, color= Station),shape=17 ,size =3)+
   theme_minimal()+
   scale_colour_manual(values =pal7)+
-  scale_x_date(date_labels =  "%b")+
   ggtitle("Average Hourly Salinity at Cove Point 2017")+
+  scale_x_datetime(date_labels = "%b", date_breaks = "1 month", minor_breaks = NULL)+
   ylab("Salinity (ppt)")+
   xlab("Date")+
-  guides(color = guide_legend(override.aes = list(size=2.5)))
+  guides(color = guide_legend(override.aes = list(size=2.5, shape =c(17,16,16,16))))
 a
 ggsave(filename = "2017_hourly_sal.svg")
 
