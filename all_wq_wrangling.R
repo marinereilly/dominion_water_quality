@@ -28,6 +28,11 @@ daily_av_2010_2017<-wq_all %>%
   group_by(Station, Year, days) %>% 
   summarise_if(.predicate = function(x) is.numeric(x),
                .funs = c(Mean="mean", Sd="sd"))
+daily_av_2010_2017$Month<-month(daily_av_2010_2017$days)
+daily_av_2010_2017$day<-day(daily_av_2010_2017$days)
+daily_av_2010_2017$date<-paste0(daily_av_2010_2017$Month,"-",daily_av_2010_2017$day,"-",daily_av_2010_2017$Year)
+daily_av_2010_2017$date<-mdy(daily_av_2010_2017$date)
+
 hourly_av_2010_2017<-wq_all %>% 
   group_by(Station, Year, days, Hour) %>% 
   summarise_if(.predicate = function(x) is.numeric(x),
