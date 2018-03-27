@@ -125,12 +125,13 @@ f
 ggsave(filename = "235.png")
 
 ###Timeline Style Salinity Graph###
-i<-wq_all %>% 
+i<-daily_av_2010_2017 %>% 
   ggplot()+
-  geom_point(aes(x=Date, y= Salinity, color=Year), na.rm=TRUE, size=0.9)+
+  geom_point(aes(x=date, y= Salinity_Mean, color=Year), na.rm=TRUE, size=0.9)+
   scale_colour_manual(values=ypal2, breaks = levels(hourly_av_2010_2017$Year))+
   scale_x_date(date_labels =  "%b %Y")+
   scale_y_continuous(limits= c(0, 15))+
+  geom_vline(xintercept = as.Date("2011-03-23"), linetype = "longdash", color="grey58")+
   theme_minimal()+
   xlab("Date")+ylab("Average Hourly Salinity (ppt)")+
   ggtitle("Salinity has decreased at Cove Point Marsh since Restoration")+
