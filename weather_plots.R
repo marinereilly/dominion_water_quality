@@ -73,7 +73,12 @@ y<-ggplot()+
                                 linetype = c("blank", "blank", "blank", "solid"))))+
   facet_grid(Station~., switch = "y")+
   theme(strip.text.y = element_text(angle = 180))
-y  
+y
+
+k<-ggplot()+
+  geom_line(data=met_daily_sum_2017, aes(x=days, y=Rainfall_Sum))+
+  scale_x_date(limits = c(as.Date("2020-08-01"), as.Date("2020-09-01")), date_breaks = "1 day", date_labels = "%d")
+k
 #####Monthly Precipitation#####
 
 w<- ggplot()+
@@ -134,6 +139,21 @@ s<-ggplot(data=hw_freq, aes(x=grouped_wind, y= n, color=Year))+
   ggtitle("North Winds Dominated High Wind Events In 2017")
 s
 
+t_season<-ggplot(data=wind_freq_seasonal, aes(x=grouped_wind, y= n, color=Year))+
+  geom_line(size=.8)+
+  geom_line(data = wfs2017, aes(x=grouped_wind, y= n, color=Year),linetype="solid", size=1)+
+  theme_minimal()+
+  scale_color_manual(values = ypal2)+
+  scale_x_continuous(breaks = c(0, 45, 90, 135,180,225,270,315), limits = c(0,360), 
+                     labels = c("N", "NE", "E", "SE", "S", "SW", "W", "NW"), minor_breaks = NULL)+
+  coord_polar(theta="x", start = )+
+  theme(axis.line=element_blank(),axis.text.y=element_blank(),axis.ticks=element_blank(), 
+        axis.title.x=element_blank(), 
+        axis.title.y=element_blank())+
+  theme(legend.position="bottom")+
+  guides(color=guide_legend(ncol = 9))+
+  ggtitle("Seasonal Variability in Wind Direction")+facet_grid(.~Season)
+t_season
 #2017 frequency of direction by wind strength
 
 r<-ggplot(data=wind_freq_strength_2017)+
@@ -148,3 +168,15 @@ r<-ggplot(data=wind_freq_strength_2017)+
   guides(fill=guide_legend(title="Beaufort Number"))
 r  
 
+#####Water Year Plots#####
+p<-day_rain %>% 
+  filter(water_year!=2010) %>% 
+  filter(water_year!=2018) %>% 
+  ggplot(., aes(x=days2, y=wy_cum_rainfall, color=as.factor(water_year), size=as.factor(water_year)))+
+  geom_step()+
+  theme_minimal()+scale_color_manual(values=ypal2)+
+  scale_size_manual(values = c("2017"=1.5, "2016"=1, "2015"=1, "2014"=1, "2013"=1, "2012"=1, "2011"=1))+
+  scale_x_date(date_labels = "%b", date_breaks = "1 month", minor_breaks = NULL)+
+  guides(color=guide_legend(title="Water Year"), size=FALSE)+
+  xlab("Date")+ylab("Cumulative Rainfall")+ggtitle("Cumulative Rainfall by Water Year")
+p
