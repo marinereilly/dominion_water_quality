@@ -48,7 +48,12 @@ salinity_hour_2017<-wq_all %>%
   summarise(salinity=mean(Salinity))
 salinity_hour_2017$Date.Time<-paste0(salinity_hour_2017$Month,"-", salinity_hour_2017$Day, "-2017", " ", salinity_hour_2017$Hour, ":00", sep="")
 salinity_hour_2017$Date.Time<-mdy_hm(salinity_hour_2017$Date.Time)
+
 #####Remove Crazy outliers#####
 #There are two Salinity averages above 500 which seems improbable but deleting
 #these values likely removes other values so I am going to attempt to remove
 #during the plotting process so it isn't permenant
+
+#####Hypoxia#####
+hypoxia_all<-wq_all %>% 
+  filter(., ODO_Conc<= 2)
