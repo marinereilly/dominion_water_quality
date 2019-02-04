@@ -169,14 +169,27 @@ r<-ggplot(data=wind_freq_strength_2017)+
 r  
 
 #####Water Year Plots#####
-p<-day_rain %>% 
+p<-r_daily_2018 %>% 
   filter(water_year!=2010) %>% 
-  filter(water_year!=2018) %>% 
   ggplot(., aes(x=days2, y=wy_cum_rainfall, color=as.factor(water_year), size=as.factor(water_year)))+
   geom_step()+
-  theme_minimal()+scale_color_manual(values=ypal2)+
-  scale_size_manual(values = c("2017"=1.5, "2016"=1, "2015"=1, "2014"=1, "2013"=1, "2012"=1, "2011"=1))+
+  theme_minimal()+
+  scale_size_manual(values = c("2018"=1.5, "2017"=1, "2016"=1, "2015"=1, "2014"=1, "2013"=1, "2012"=1, "2011"=1))+
   scale_x_date(date_labels = "%b", date_breaks = "1 month", minor_breaks = NULL)+
   guides(color=guide_legend(title="Water Year"), size=FALSE)+
   xlab("Date")+ylab("Cumulative Rainfall")+ggtitle("Cumulative Rainfall by Water Year")
 p
+
+p2<-day_rain3 %>% 
+  filter(water_year!=2010) %>% 
+  ggplot(., aes(x=days2, y=wy_cum_rainfall, color=as.factor(water_year), size=as.factor(water_year)))+
+  geom_step()+
+  theme_minimal()+
+  scale_size_manual(values = c("2018"=1.5, "2017"=1, "2016"=1, "2015"=1, "2014"=1, "2013"=1, "2012"=1, "2011"=1, "2010"=1, "2019"=1))+
+  scale_x_date(date_labels = "%b", date_breaks = "1 month", minor_breaks = NULL)+
+  guides(color=guide_legend(title="Water Year"), size=FALSE)+
+  scale_color_manual(values =  c("2018"="red2", "2017"="grey72", "2016"="grey72", "2015"="grey72", "2014"="grey72","2013"="grey72", "2012"="grey72", "2011"="grey72", "2010"="grey72", "2019"="steelblue3"))+
+  xlab("Date")+ylab("Cumulative Rainfall")+ggtitle("Cumulative Rainfall by Water Year")
+p2
+
+wy_pal<-c("2018"="red2", "2017"="grey72", "2016"="grey72", "2015"="grey72", "2014"="grey72","2013"="grey72", "2012"="grey72", "2011"="grey72", "2010"="grey72", "2019"="steelblue3")
