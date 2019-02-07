@@ -7,18 +7,18 @@ library(ggplot2)
 #May be missing Nov 19 - Nov 30 Look later
 wl1 <- read.delim("H:/0_HarrisLab/1_CURRENT PROJECT FOLDERS/Dominion/01_new_dominion/surveys/hobo/data/2018/csv/WL_12_19_2017_02_14_2018.csv", header=FALSE, comment.char="#", stringsAsFactors=FALSE)
 wl1<-wl1[-1,-1]
-wl_head<-c("datetime", "kPA", "temp", "barokPA", "depth")
-colnames(wl1)<-wl_head
-wl1$kPA<-as.character(wl1$kPA)
+wl_head<-c("datetime", "kPA", "temp", "barokPA", "depth") #creates a list of column names in the order of the columns
+colnames(wl1)<-wl_head #assigns the columns the names we created above
+wl1$kPA<-as.character(wl1$kPA) #formats for joining purposes
 wl1$temp<-as.character(wl1$temp)
 wl1$barokPA<-as.character(wl1$barokPA)
 wl1$depth<-as.character(wl1$depth)
 View(wl1)
 
 wl2 <- read.csv("H:/0_HarrisLab/1_CURRENT PROJECT FOLDERS/Dominion/01_new_dominion/surveys/hobo/data/2018/csv/CPWeir_02_28_2018.csv", header=FALSE, na.strings="", stringsAsFactors=FALSE)
-wl2<-wl2[-c(1:2),-1]
+wl2<-wl2[-c(1:2),-1] #removes the first two rows and the first column
 colnames(wl2)<-wl_head
-wl2<-wl2[!is.na(wl2$depth),]
+wl2<-wl2[!is.na(wl2$depth),] #removes rows where there is no depth value
 View(wl2)
 
 wl3 <- read.csv("H:/0_HarrisLab/1_CURRENT PROJECT FOLDERS/Dominion/01_new_dominion/surveys/hobo/data/2018/csv/CPWeir_03_15_2018.csv", header=FALSE, na.strings="", stringsAsFactors=FALSE)
@@ -79,7 +79,7 @@ View(wl12)
 
 wl13 <- read.csv("H:/0_HarrisLab/1_CURRENT PROJECT FOLDERS/Dominion/01_new_dominion/surveys/hobo/data/2018/csv/CPWeir_01_18_2019.csv", header=FALSE, na.strings="", stringsAsFactors=FALSE)
 wl13<-wl13[-c(1:2),-1]
-wl13$datetime<-paste0(wl13$V2, " ", wl13$V3)
+wl13$datetime<-paste0(wl13$V2, " ", wl13$V3) #combines the date column and the time column so that it is the same as the other data.  Will probably be separated again during analysis
 colnames(wl13)<-c("date", "time", "kPA", "temp", "barokPA", "depth", "datetime")
 View(wl13)
 #####Join Hobo Water Level Data####
@@ -95,6 +95,24 @@ hobo_wl<-full_join(wl1,wl2) %>%
   full_join(., wl10) %>% 
   full_join(., wl11) %>% 
   full_join(., wl13) %>% 
-  select(-date, -time)
+  select(-date, -time) #Joins all of the wl data with all columns and removes the date and time columns since they only exist in wl13
 View(hobo_wl)
-saveRDS(hobo_wl, "hobo_wl_2019.rds")
+saveRDS(hobo_wl, "hobo_wl_2019.rds") #saves this as an r object that can be read in again later (more efficient than csv for large data files)
+rm(wl1,wl2,wl3,wl4,wl5,wl6,wl7,wl8,wl9,wl10,wl11,wl12,wl13, hobo_wl) #removes the temporary objects we made from the global environment
+
+#####Load Hobo Water Level Data####
+hobo<-readRDS("hobo_wl_2019.rds")
+
+#####Hobo Salinity Data####
+#may be missing January 1 - February 14 - look later
+sal1<-read.csv("H:/0_HarrisLab/1_CURRENT PROJECT FOLDERS/Dominion/01_new_dominion/surveys/hobo/data/2018/csv/sal_02_28_2018.csv", header=FALSE, na.strings="", stringsAsFactors=FALSE)
+sal_names<-c("datetime", "conductivity", "temperature", "sp_cond", "salinity")
+sal1<-sal1[-c(1:2),-1]
+colnames(sal1)<-sal_names
+View(sal1)
+
+sal2<-read.csv("H:/0_HarrisLab/1_CURRENT PROJECT FOLDERS/Dominion/01_new_dominion/surveys/hobo/data/2018/csv/sal_03_15_2018b.csv", header=FALSE, na.strings="", stringsAsFactors=FALSE)
+sal2<-sal2[-1,-1]
+colnames(sal2)<-sal_names
+View(sal2)
+
